@@ -1,4 +1,4 @@
-import { Address, beginCell, BitReader, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from '@ton/core';
+import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from '@ton/core';
 
 export type DecentralizedDiplomasConfig = {};
 
@@ -7,8 +7,8 @@ export function decentralizedDiplomasConfigToCell(config: DecentralizedDiplomasC
 }
 
 function bufferToBigInt(buffer: Buffer) {
-  const bufferAsHexString = buffer.toString("hex");
-  return BigInt(`0x${bufferAsHexString}`);
+    const bufferAsHexString = buffer.toString("hex");
+    return BigInt(`0x${bufferAsHexString}`);
 }
 
 function calculateUserId(user_info: string): bigint {

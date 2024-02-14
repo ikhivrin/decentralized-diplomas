@@ -15,7 +15,6 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const decentralizedDiplomas = provider.open(DecentralizedDiplomas.createFromAddress(address));
 
     ui.write('Issuing diploma...');
-    ui.write(`Issuer (current address): ${address}`);
 
     const receiver_info = await ui.input('Receiver information (first, surname, birth date): ');
     const merit = await ui.input('Merit: ');
@@ -25,5 +24,5 @@ export async function run(provider: NetworkProvider, args: string[]) {
         value: toNano('0.05'),
     });
 
-    ui.write('Waiting for issue...');
+    ui.write('Issued, it will be available in a few seconds to a few minutes.');
 }

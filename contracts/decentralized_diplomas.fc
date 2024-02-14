@@ -58,7 +58,7 @@ cell create_diploma(slice giver_addr, slice achievement_str) {
             .end_cell().begin_parse();
 
         ;; only reference to diploma is stored inside a dict
-        diplomas_map = diplomas_map.udict_set(256, user_id, dict_value_slice);
+        diplomas_map~udict_set(256, user_id, dict_value_slice);
         save_data();
 
         return ();

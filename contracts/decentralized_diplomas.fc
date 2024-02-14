@@ -26,6 +26,7 @@ cell create_diploma(slice giver_addr, slice achievement_str) {
     ;; since diplomas are stored in a dict, who got it is already obvious from the key
     return begin_cell()
         .store_ref(begin_cell().store_slice(giver_addr).end_cell())
+        .store_uint(now(), 64)
         .store_slice(achievement_str) ;; this is stored as a string tail, order matters!
         .end_cell();
 }

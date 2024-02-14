@@ -71,6 +71,7 @@ export class DecentralizedDiplomas implements Contract {
 
         return {
             address: diplomaSlice.loadRef().asSlice().loadAddress(),
+            issue_time: new Date(diplomaSlice.loadUint(64) * 1000),
             achievement: diplomaSlice.loadStringTail()
         };
     }

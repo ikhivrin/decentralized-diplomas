@@ -18,8 +18,10 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
     const diploma = await decentralizedDiplomas.getDiploma(user_info);
 
-    ui.write(`======= Diploma =======`);
-    ui.write(`Of "${user_info}"`);
+    ui.write(`============== Diploma ==============`);
+    ui.write(`Received by "${user_info}"`);
     ui.write(`Issued by ${diploma.address}`);
     ui.write(`For "${diploma.achievement}"`);
+    ui.write(`Issue time: ${diploma.issue_time}`);
+    ui.write(`=====================================`);
 }

@@ -21,6 +21,15 @@ global cell diplomas_map;
     );
 }
 
+
+cell create_diploma(slice giver_addr, slice achievement_str) {
+    ;; since diplomas are stored in a dict, who got it is already obvious from the key
+    return begin_cell()
+        .store_ref(begin_cell().store_slice(giver_addr).end_cell())
+        .store_slice(achievement_str) ;; this is stored as a string tail, order matters!
+        .end_cell();
+}
+
 ;; recv_internal is the main function of the contract and is called when it receives a message from other contracts
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
     if (in_msg_body.slice_empty?()) { ;; ignore all empty messages
@@ -38,15 +47,17 @@ global cell diplomas_map;
 
     int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
 
-    if (op == 1) {
-        int user_id = in_msg_body~load_uint(64);
-        int value = in_msg_body~load_uint(64);
+    if (op == 1) { ;; operation 1 --- issue a diploma, the only supported operation
+        int user_id = in_msg_body~load_uint(256);
+        slice achievement_str = in_msg_body; ;; the rest is a stored string
 
-        var value_slice = begin_cell()
-            .store_ref(begin_cell().store_slice(sender_address).end_cell())
+        cell diploma = create_diploma(sender_address, achievement_str);
+        slice dict_value_slice = begin_cell()
+            .store_ref(diploma)
             .end_cell().begin_parse();
 
-        diplomas_map = diplomas_map.udict_set(64, user_id, value_slice);
+        ;; only reference to diploma is stored inside a dict
+        diplomas_map = diplomas_map.udict_set(256, user_id, dict_value_slice);
         save_data();
 
         return ();
@@ -55,21 +66,10 @@ global cell diplomas_map;
     throw(0xffff); ;; if the message contains an op that is not known to this contract, we throw
 }
 
-;; get methods are a means to conveniently read contract data using, for example, HTTP APIs
-;; they are marked with method_id
-;; note that unlike in many other smart contract VMs, get methods cannot be called by other contracts
-
-cell get_diploma(int id) method_id {
+cell get_diploma(int target_user_id) method_id {
     load_data();
     var (user_diplomas_list, found) =
-        diplomas_map.udict_get?(64, id);
-
-    ;; int workchain_id = user_diplomas_list~load_uint(8); 
-    ;; int address_id = user_diplomas_list~load_uint(256); 
-
-    ;; tuple diploma = empty_tuple();
-    ;; diploma~tpush(workchain_id);
-    ;; diploma~tpush(address_id);
+        diplomas_map.udict_get?(256, target_user_id);
 
     return user_diplomas_list~load_ref();
 }

@@ -14,17 +14,13 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
     const decentralizedDiplomas = provider.open(DecentralizedDiplomas.createFromAddress(address));
 
-    // ui.write('Issuing diploma...');
-    // ui.write(`Issuer (current address): ${address}`);
-    // await ui.input('Receiver information: ');
-    // await ui.input('Merit: ');
+    ui.write('Issuing diploma...');
+    ui.write(`Issuer (current address): ${address}`);
 
-    const user_id = BigInt(parseInt(await ui.input('Write user_id: ')));
-    const value = BigInt(parseInt(await ui.input('Write value: ')));
+    const receiver_info = await ui.input('Receiver information (first, surname, birth date): ');
+    const merit = await ui.input('Merit: ');
 
-    ui.write(`${user_id}: ${value}`);
-
-    await decentralizedDiplomas.sendIssue(provider.sender(), user_id, value,
+    await decentralizedDiplomas.sendIssue(provider.sender(), receiver_info, merit,
     {
         value: toNano('0.05'),
     });

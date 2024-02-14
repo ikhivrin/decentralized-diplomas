@@ -14,8 +14,12 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
     const decentralizedDiplomas = provider.open(DecentralizedDiplomas.createFromAddress(address));
 
-    const user_id = BigInt(parseInt(await ui.input("Enter user_id: ")))
+    const user_info = await ui.input("Enter receiver info (name, surname): ")
 
-    const counter = await decentralizedDiplomas.getDiploma(user_id);
-    ui.write(`Counter: ${counter}`);
+    const diploma = await decentralizedDiplomas.getDiploma(user_info);
+
+    ui.write(`======= Diploma =======`);
+    ui.write(`Of "${user_info}"`);
+    ui.write(`Issued by ${diploma.address}`);
+    ui.write(`For "${diploma.achievement}"`);
 }

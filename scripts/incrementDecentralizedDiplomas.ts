@@ -30,8 +30,4 @@ export async function run(provider: NetworkProvider, args: string[]) {
     });
 
     ui.write('Waiting for issue...');
-
-    const counter = await decentralizedDiplomas.getDiploma();
-    ui.write(`${counter}`);
-
 }

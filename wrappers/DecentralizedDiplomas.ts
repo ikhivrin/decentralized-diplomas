@@ -47,9 +47,10 @@ export class DecentralizedDiplomas implements Contract {
         });
     }
 
-    async getDiploma(provider: ContractProvider) {
-        const result = await provider.get('get_diploma', []);
-        return result.stack.readNumber();
+    async getDiploma(provider: ContractProvider, user_id: bigint) {
+        const result = await provider.get('get_diploma', [ { type: 'int', value: user_id } ]);
+        let address = result.stack.readCell();
+        return address.asSlice().loadAddress();
     }
 
 }

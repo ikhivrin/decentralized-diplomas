@@ -34,6 +34,7 @@ global cell diplomas_map;
     }
 
     load_data(); ;; here we populate the storage variables
+    slice sender_address = cs~load_msg_addr();
 
     int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
 
@@ -42,7 +43,7 @@ global cell diplomas_map;
         int value = in_msg_body~load_uint(64);
 
         var value_slice = begin_cell()
-            .store_uint(value, 64)
+            .store_ref(begin_cell().store_slice(sender_address).end_cell())
             .end_cell().begin_parse();
 
         diplomas_map = diplomas_map.udict_set(64, user_id, value_slice);
@@ -58,11 +59,17 @@ global cell diplomas_map;
 ;; they are marked with method_id
 ;; note that unlike in many other smart contract VMs, get methods cannot be called by other contracts
 
-int get_diploma() method_id {
+cell get_diploma(int id) method_id {
     load_data();
     var (user_diplomas_list, found) =
-        diplomas_map.udict_get?(64, 1);
+        diplomas_map.udict_get?(64, id);
 
-    int result = user_diplomas_list~load_uint(64); 
-    return result;
+    ;; int workchain_id = user_diplomas_list~load_uint(8); 
+    ;; int address_id = user_diplomas_list~load_uint(256); 
+
+    ;; tuple diploma = empty_tuple();
+    ;; diploma~tpush(workchain_id);
+    ;; diploma~tpush(address_id);
+
+    return user_diplomas_list~load_ref();
 }

@@ -68,7 +68,12 @@ export class DecentralizedDiplomas implements Contract {
 
         let diplomas = new Array()
 
-        let list = result.stack.readCell()
+        let cell = result.stack.readCellOpt();
+        if (cell == null)
+            return [];
+
+        let list = cell;
+
         while (true) {
             let nodeSlice = list.asSlice();
             let diplomaSlice = nodeSlice.loadRef().asSlice();
@@ -79,15 +84,15 @@ export class DecentralizedDiplomas implements Contract {
                 achievement: diplomaSlice.loadStringTail()
             };
 
-            diplomas.push(diploma)
+            diplomas.push(diploma);
 
-            if (nodeSlice.remainingRefs == 0)
+            if (list.refs.length == 1)
                 break
 
-            list = nodeSlice.loadRef()
+            list = nodeSlice.loadRef();
         }
 
-        return diplomas
+        return diplomas;
     }
 
 }

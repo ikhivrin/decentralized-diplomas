@@ -58,7 +58,7 @@ cell create_diploma(slice giver_addr, slice achievement_str) {
 
         builder new_link_builder = begin_cell().store_ref(diploma);
         if (found) {
-            new_link_builder.store_ref(user_diplomas_list~load_ref());
+            new_link_builder = new_link_builder.store_ref(user_diplomas_list~load_ref());
         }
 
         cell new_link = new_link_builder.end_cell();
@@ -78,5 +78,9 @@ cell get_diploma(int target_user_id) method_id {
     var (user_diplomas_list, found) =
         diplomas_map.udict_get?(256, target_user_id);
 
-    return user_diplomas_list~load_ref();
+    if (found) {
+        return user_diplomas_list~load_ref();
+    }
+
+    return null();
 }

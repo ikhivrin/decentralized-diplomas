@@ -20,11 +20,17 @@ export async function run(provider: NetworkProvider, args: string[]) {
     for (let i = 0; i < diplomas.length; i ++) {
         const diploma = diplomas[i]
 
-        ui.write(`============== Diploma ==============`);
+        ui.write(`============== DIPLOMA ==============`);
         ui.write(`Received by "${user_info}"`);
         ui.write(`Issued by ${diploma.address}`);
         ui.write(`For "${diploma.achievement}"`);
         ui.write(`Issue time: ${diploma.issue_time}`);
         ui.write(`=====================================`);
+    }
+
+    if (diplomas.length == 0) {
+        ui.write(`====================================`);
+        ui.write(`========= NO DIPLOMAS YET! =========`);
+        ui.write(`====================================`);
     }
 }

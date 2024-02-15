@@ -16,12 +16,15 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
     const user_info = await ui.input("Enter receiver info (name, surname): ")
 
-    const diploma = await decentralizedDiplomas.getDiploma(user_info);
+    const diplomas = await decentralizedDiplomas.getDiploma(user_info);
+    for (let i = 0; i < diplomas.length; i ++) {
+        const diploma = diplomas[i]
 
-    ui.write(`============== Diploma ==============`);
-    ui.write(`Received by "${user_info}"`);
-    ui.write(`Issued by ${diploma.address}`);
-    ui.write(`For "${diploma.achievement}"`);
-    ui.write(`Issue time: ${diploma.issue_time}`);
-    ui.write(`=====================================`);
+        ui.write(`============== Diploma ==============`);
+        ui.write(`Received by "${user_info}"`);
+        ui.write(`Issued by ${diploma.address}`);
+        ui.write(`For "${diploma.achievement}"`);
+        ui.write(`Issue time: ${diploma.issue_time}`);
+        ui.write(`=====================================`);
+    }
 }

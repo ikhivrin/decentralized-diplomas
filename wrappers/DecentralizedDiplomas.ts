@@ -66,14 +66,28 @@ export class DecentralizedDiplomas implements Contract {
 
         const result = await provider.get('get_diploma', [ { type: 'int', value: user_id } ]);
 
-        const diploma = result.stack.readCell();
-        let diplomaSlice = diploma.asSlice();
+        let diplomas = new Array()
 
-        return {
-            address: diplomaSlice.loadRef().asSlice().loadAddress(),
-            issue_time: new Date(diplomaSlice.loadUint(64) * 1000),
-            achievement: diplomaSlice.loadStringTail()
-        };
+        let list = result.stack.readCell()
+        while (true) {
+            let nodeSlice = list.asSlice();
+            let diplomaSlice = nodeSlice.loadRef().asSlice();
+
+            let diploma = {
+                address: diplomaSlice.loadRef().asSlice().loadAddress(),
+                issue_time: new Date(diplomaSlice.loadUint(64) * 1000),
+                achievement: diplomaSlice.loadStringTail()
+            };
+
+            diplomas.push(diploma)
+
+            if (nodeSlice.remainingRefs == 0)
+                break
+
+            list = nodeSlice.loadRef()
+        }
+
+        return diplomas
     }
 
 }

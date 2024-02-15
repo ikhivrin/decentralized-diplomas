@@ -1,6 +1,6 @@
 import { Address, toNano } from '@ton/core';
 import { DecentralizedDiplomas } from '../wrappers/DecentralizedDiplomas';
-import { NetworkProvider, sleep } from '@ton/blueprint';
+import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
     const ui = provider.ui();

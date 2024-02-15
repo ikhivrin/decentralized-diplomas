@@ -53,12 +53,18 @@ cell create_diploma(slice giver_addr, slice achievement_str) {
         slice achievement_str = in_msg_body; ;; the rest is a stored string
 
         cell diploma = create_diploma(sender_address, achievement_str);
-        slice dict_value_slice = begin_cell()
-            .store_ref(diploma)
-            .end_cell().begin_parse();
+
+        var (user_diplomas_list, found) = diplomas_map.udict_get?(256, user_id);
+
+        builder new_link_builder = begin_cell().store_ref(diploma);
+        if (found) {
+            new_link_builder.store_ref(user_diplomas_list~load_ref());
+        }
+
+        cell new_link = new_link_builder.end_cell();
 
         ;; only reference to diploma is stored inside a dict
-        diplomas_map~udict_set(256, user_id, dict_value_slice);
+        diplomas_map~udict_set_ref(256, user_id, new_link);
         save_data();
 
         return ();

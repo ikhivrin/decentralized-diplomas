@@ -14,14 +14,15 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
     const decentralizedDiplomas = provider.open(DecentralizedDiplomas.createFromAddress(address));
 
-    const user_info = await ui.input("Enter receiver info (name, surname): ")
+    ui.write("Receiver info [name, surname, birth date in YYYY-MM-DD format, all separated by a single space]\n");
+    const receiver_info = await ui.input("Enter receiver info: ")
 
-    const diplomas = await decentralizedDiplomas.getDiploma(user_info);
+    const diplomas = await decentralizedDiplomas.getDiploma(receiver_info);
     for (let i = 0; i < diplomas.length; i ++) {
         const diploma = diplomas[i]
 
         ui.write(`============== DIPLOMA ==============`);
-        ui.write(`Received by "${user_info}"`);
+        ui.write(`Received by "${receiver_info}"`);
         ui.write(`Issued by ${diploma.address}`);
         ui.write(`For "${diploma.achievement}"`);
         ui.write(`Issue time: ${diploma.issue_time}`);

@@ -16,7 +16,8 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
     ui.write('Issuing diploma...');
 
-    const receiver_info = await ui.input('Receiver information (first, surname, birth date): ');
+    ui.write("Receiver info [name, surname, birth date in YYYY-MM-DD format, all separated by a single space]\n");
+    const receiver_info = await ui.input("Enter receiver info: ")
     const merit = await ui.input('Merit: ');
 
     await decentralizedDiplomas.sendIssue(provider.sender(), receiver_info, merit,
